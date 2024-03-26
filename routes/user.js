@@ -80,5 +80,26 @@ userRouter.post("/", async function (req, res, next) {
     });
 });
 
+
+// Delete user
+userRouter.delete("/:username", function (req, res, next) {
+  const username = req.params.username;
+
+User.findOneAndDelete({ username}) //User or user router?
+  .then((deletedUser) => {
+    if (deletedUser) {
+      // User found and deleted successfully
+      res.status(200).json({ message: "User deleted successfully", deletedUser });
+    } else {
+      // User not found
+      res.status(404).json({ message: "User not found" });
+    }
+  })
+.catch((err)=> {
+  console.log(err);
+  res.status(500).json({message: "Error caught: Internal Server Error"})
+})
+})
+
 //Exporting the router
 module.exports = userRouter;
