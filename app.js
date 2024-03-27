@@ -5,7 +5,7 @@ var logger = require('morgan');
 var mongoose = require('mongoose')
 var cors = require('cors');
 
-
+var authRouter =require('./routes/auth');
 var userRouter = require('./routes/user');
 
 
@@ -23,7 +23,7 @@ app.use(express.urlencoded({ extended: false })); //URL encoded data is parsed w
 //Add CORS middleware to Express app
 app.use(
   cors({
-    origin: [process.env.MONGODB_URI] //this is  the origin
+    origin: [process.env.REACT_APP_URI] //this is  the origin
   })
 );
 
@@ -38,12 +38,15 @@ app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(cors());
+app.use(cors({
+  origin: [process.env.REACT_APP_URI]  // <== URL of our future React app
+}));
 
 
 // Routes with Express Router
 //App.use() for routes to be accessible in your application 
 app.use('/users', userRouter);
+app.use('/auth', authRouter);
 
 
 
