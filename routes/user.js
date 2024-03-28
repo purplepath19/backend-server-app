@@ -15,9 +15,8 @@ userRouter.get("/", function (req, res, next) {
       console.log(err);
       res.status(500).json({ message: "Internal Server Error" });
     });
-    
+
   // res.send("any string");
-  
 });
 
 // user route
@@ -45,7 +44,7 @@ userRouter.post("/", async function (req, res, next) {
     .then((foundUser) => {
       // If the user with the same email already exists, send an error response
       if (foundUser) {
-        console.log("foundUser", foundUser)
+        console.log("foundUser", foundUser);
         res.status(400).json({ message: "Username already exists." });
         return;
       }
@@ -81,25 +80,51 @@ userRouter.post("/", async function (req, res, next) {
 });
 
 
+//Update user 
+userRouter.put("/:username",function(req, res, next) {
+  const {username} = req.params; //must extract from req param
+  console.log("username", username, req.body);
+  User.findOneAndUpdate({username}, req.body, {new:true})
+  .then(updatedUser => {
+    console.log("Update User---->" , updatedUser);
+    if (updatedUser) {
+      console.log("UPDATED!!! ===>", updatedUser)
+      res.status(201).json(updatedUser)
+    } else {
+      console.log("User not found");
+      res.status(400).json({message: "User not found"})
+    }
+  })
+  .catch((err) => {
+    console.log(err);
+    res.status(500).json({message: "Error: Updating user"})
+  } )
+} );
+
+
+
+
 // Delete user
 userRouter.delete("/:username", function (req, res, next) {
   const username = req.params.username;
 
-User.findOneAndDelete({ username}) //User or user router?
-  .then((deletedUser) => {
-    if (deletedUser) {
-      // User found and deleted successfully
-      res.status(200).json({ message: "User deleted successfully", deletedUser });
-    } else {
-      // User not found
-      res.status(404).json({ message: "User not found" });
-    }
-  })
-.catch((err)=> {
-  console.log(err);
-  res.status(500).json({message: "Error caught: Internal Server Error"})
-})
-})
+  User.findOneAndDelete({ username }) //User or user router?
+    .then((deletedUser) => {
+      if (deletedUser) {
+        // User found and deleted successfully
+        res
+          .status(200)
+          .json({ message: "User deleted successfully", deletedUser });
+      } else {
+        // User not found
+        res.status(404).json({ message: "User not found" });
+      }
+    })
+    .catch((err) => {
+      console.log(err);
+      res.status(500).json({ message: "Error caught: Internal Server Error" });
+    });
+});
 
 //Exporting the router
 module.exports = userRouter;
