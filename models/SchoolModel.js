@@ -18,4 +18,4 @@ const schoolSchema = new Schema (
 )
 
 
-module.exports = model("SchoolModel", schoolSchema);
+module.exports = model("schools", schoolSchema);
