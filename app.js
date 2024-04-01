@@ -7,6 +7,7 @@ var cors = require('cors');
 
 var authRouter =require('./routes/auth');
 var userRouter = require('./routes/user');
+var schoolRouter = require('./routes/schools');
 
 
 
@@ -34,6 +35,8 @@ app.use(
 //App.use() for routes to be accessible in your application 
 app.use('/users', userRouter);
 app.use('/auth', authRouter);
+app.use('/schools' , schoolRouter);
+// app.use('/schools', schoolRouter);
 
 
 
