@@ -5,8 +5,10 @@ const schoolSchema = new Schema (
     position: {
         type: String,
     },
-    title: {
+    name: {
         type: String,
+        required: true,
+        unique: true
     },
     content: {
         type: String, 
