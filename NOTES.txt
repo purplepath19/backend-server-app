@@ -4,3 +4,12 @@ res = response. It represents the HTTP response that the server sends back to th
 
 next = function. Hands off control to the next middleware function.
 When called, Express will move to the next middleware function or route handler in the chain.
+
+
+Third model notes: 
+Author: type objectId with ref to logged in users 
+attach ratings to school - logged in users 
+
+School - add location - search for a place 
+
+
