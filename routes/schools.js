@@ -9,7 +9,7 @@ const schoolRouter = express.Router();
 //Get the schools
 schoolRouter.get("/", function (req, res, next) {
 
-  const school = SchoolModel.find({})
+  SchoolModel.find()
     .then((schools) => {
       res.status(201).json(schools);
       return;
@@ -23,10 +23,12 @@ schoolRouter.get("/", function (req, res, next) {
 });
 
 // School route
-schoolRouter.get("/:name", function (req, res, next) {
-  const name = req.params.name;
+schoolRouter.get("/:id", function (req, res, next) {
+
+  console.log("These are params", req.params.id)
+
   
-  SchoolModel.findOne({ name })
+  SchoolModel.findById(req.params.id)
     .then((foundSchool) => {
       if (foundSchool) {
         res.status(201).json(foundSchool);
@@ -42,7 +44,7 @@ schoolRouter.get("/:name", function (req, res, next) {
 // POST
 schoolRouter.post("/", isAuthenticated, async function (req, res, next) {
   // console.log(req.headers);
-  const { position, name, content } = req.body; //extract data from req body
+  const { address, latitude, longitude, name, description, photo } = req.body; //extract data from req body
 
   SchoolModel.findOne({ name })
     .then((foundSchool) => {
@@ -53,19 +55,17 @@ schoolRouter.post("/", isAuthenticated, async function (req, res, next) {
         return;
       }
 
+      let thisPhoto
+
+      if (photo) {
+        thisPhoto = photo
+      }
       // Create a new user in the database
       // We return a pending promise, which allows us to chain another `then`
-      SchoolModel.create({ position, name, content })
+      SchoolModel.create({ address, latitude, longitude, name, description, photo: thisPhoto, user: req.user._id })
         .then((createdSchool) => {
-          // Deconstruct the newly created user object to omit the password
-          // We should never expose passwords publicly
-          const { position, name, content, _id } = createdSchool;
 
-          // Create a new object that doesn't expose the password
-          const school = { position, name, content, _id };
-
-          // Send a json response containing the user object
-          res.status(201).json({ school: school });
+          res.status(201).json({ school: createdSchool });
         })
         .catch((err) => {
           if (err instanceof mongoose.Error.ValidationError) {
