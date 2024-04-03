@@ -29,6 +29,9 @@ schoolRouter.get("/:id", function (req, res, next) {
 
   
   SchoolModel.findById(req.params.id)
+    .populate({path: "reviews", 
+      populate: {path: "author"}
+  })
     .then((foundSchool) => {
       if (foundSchool) {
         res.status(201).json(foundSchool);

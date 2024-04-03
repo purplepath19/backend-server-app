@@ -24,4 +24,4 @@ const schoolSchema = new Schema (
 )
 
 
-module.exports = model("schools", schoolSchema);
+module.exports = model("School", schoolSchema);
