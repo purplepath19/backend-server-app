@@ -24,6 +24,10 @@ app.use(logger('dev'));
 app.use(express.json()); //express.JSON is built-in middleware in Express that parses incoming requests bodies with JSON 
 app.use(express.urlencoded({ extended: false })); //URL encoded data is parsed with the `querystring` library
 //Add CORS middleware to Express app
+
+app.set('trust proxy', 1);
+app.enable('trust proxy');
+
 app.use(
   cors({
     origin: [process.env.REACT_APP_URI] //this is  the origin
